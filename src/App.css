@@ -1,38 +1,120 @@
-.App {
-  text-align: center;
+.question {
+  font-size: 34px;
+  font-weight: bold;
+  margin-bottom: 18px;
 }
 
-.App-logo {
-  height: 40vmin;
+.question__answer {
+  color: #198754;
+}
+
+.type-subset legend {
+  font-size: 18px;
+}
+
+fieldset {
+  margin-bottom: 20px;
+}
+
+input[type=checkbox] {
+  transform: scale(1.5);
+  margin-left: 5px;
+  margin-right: 6px;
+}
+
+label {
+  font-size: 18px;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  opacity: .75;
+  font-size: 20px;
+}
+
+.your-answer {
+  display: none;
+}
+
+.scoreboard {
+  display: flex;
+  margin-bottom: 18px;
+}
+
+.scoreboard__score {
+  background-color: #198754;
+  color: #fff;
+}
+
+.scoreboard__score:not(:last-child) {
+  margin-right: 4px;
+}
+
+.scoreboard__score--incorrect {
+  background-color: #dc3545;
+}
+
+.scoreboard__score--average-time {
+  background-color: #358fdc;
+}
+
+.scoreboard__average-time {
+  display: none;
+}
+
+.answer-icon {
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.answer-icon svg {
+  fill: #fff;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.badge-icon {
+  margin-right: 6px;
+}
+
+.end-session-btn {
+  display: none;
+}
+
+.end-session-btn--active {
+  display: block;
+}
+
+.results {
+  display: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.notice--error {
+  color: #cd3d64;
+  font-weight: 700;
+}
+
+.header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border-bottom: 1px solid #c5c5c5;
+  min-height: 45px;
+  margin-bottom: 30px;
 }
 
-.App-link {
-  color: #61dafb;
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.header__link--active {
+  font-weight: 600;
+}
+
+.header__nav {
+  display: flex;
+  gap: 20px;
 }
