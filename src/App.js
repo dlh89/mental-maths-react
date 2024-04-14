@@ -4,6 +4,7 @@ import Home from './components/Home';
 import NotFound from './components/NotFound';
 import Stats from './components/Stats';
 import Login from './components/Login';
+import Register from './components/Register';
 import { useAuth } from './AuthContext';
 
 function ProtectedRoute({ children }) {
@@ -16,6 +17,11 @@ function LoginRedirect() {
   return user.currentUser ? <Navigate to="/dashboard" replace /> : <Login />;
 }
 
+function RegisterRedirect() {
+  const user = useAuth();
+  return user.currentUser ? <Navigate to="/dashboard" replace /> : <Register />;
+}
+
 function App() {
   return (
     <div className="App">
@@ -24,6 +30,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
         <Route path="/login" element={<LoginRedirect  />} />
+        <Route path="/register" element={<RegisterRedirect  />} />
       </Routes>
     </div>
   );

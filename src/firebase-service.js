@@ -24,6 +24,9 @@ export const auth = getAuth(firebaseApp);
 export const userLogin = (loginEmail, loginPassword) => {
     return signInWithEmailAndPassword(auth, loginEmail, loginPassword);
 }
+export const userRegister = (loginEmail, loginPassword) => {
+    return createUserWithEmailAndPassword(auth, loginEmail, loginPassword);
+}
 export const logout = () => {
     return signOut(auth);
 }
