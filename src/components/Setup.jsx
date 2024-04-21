@@ -17,7 +17,6 @@ const Setup = () => {
         multiplication_3x3: false,
         multiplication_3x4: false,
         multiplication_4x4: false,
-        multiplication_1x1: false,
         addition_1x1: false,
         addition_1x2: false,
         addition_1x3: false,
@@ -51,13 +50,13 @@ const Setup = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const selectedInputs = {};
-        Object.keys(inputs).map((input) => {
+        Object.keys(inputs).forEach((input) => {
             if (inputs[input]) {
                 selectedInputs[input] = true;
             }
         });
         const queryParams = new URLSearchParams(selectedInputs).toString();
-        navigate(`/play?${queryParams}`);
+        navigate(`/setup/play?${queryParams}`);
     }
 
     return (
@@ -66,7 +65,7 @@ const Setup = () => {
             <div className="container">
                 <h1 className="display-2">Mental Maths</h1>
                 <div className="js-pre-start mb-5">
-                    <form action="game/index.html" method="get" onSubmit={handleSubmit}>
+                    <form method="get" onSubmit={handleSubmit}>
                         <fieldset className="start-form__fieldset">
                             <legend className="heading-2">Question types</legend>
                             <div>

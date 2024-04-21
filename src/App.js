@@ -4,6 +4,7 @@ import Home from './components/Home';
 import NotFound from './components/NotFound';
 import Stats from './components/Stats';
 import Setup from './components/Setup';
+import Play from './components/Play';
 import Login from './components/Login';
 import Register from './components/Register';
 import { useAuth } from './AuthContext';
@@ -30,6 +31,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/setup" element={<ProtectedRoute><Setup /></ProtectedRoute>} />
+        <Route path="/setup/play" element={<ProtectedRoute><Play /></ProtectedRoute>} />
         <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
         <Route path="/login" element={<LoginRedirect  />} />
         <Route path="/register" element={<RegisterRedirect  />} />
