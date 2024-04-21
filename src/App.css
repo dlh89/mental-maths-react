@@ -110,7 +110,7 @@ label {
   justify-content: space-between;
 }
 
-.header__link--active {
+.header__link.active {
   font-weight: 600;
 }
 

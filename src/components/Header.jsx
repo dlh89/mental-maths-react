@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { logout } from '../firebase-service';
 
@@ -15,16 +15,16 @@ const Header = () => {
             <div className="container">
                 <nav className="header__container">
                     <div className="header__nav">
-                        <Link to="/" className="header__link header__link--active">Home</Link>
-                        <Link to="/setup" className="header__link">Play</Link>
+                        <NavLink to="/" className="header__link">Home</NavLink>
+                        <NavLink to="/setup" className="header__link">Play</NavLink>
                         {user.currentUser && (
                             <div>
-                                <Link to="/stats" className="header__link">Stats</Link>
+                                <NavLink to="/stats" className="header__link">Stats</NavLink>
                             </div>
                         )}
                     </div>
                     {!user.currentUser ? (
-                        <Link to="/login" className="header__login-btn">Login</Link>
+                        <NavLink to="/login" className="header__login-btn">Login</NavLink>
                     ) : (
                         <button className="btn btn-primary" onClick={handleLogout}>Log out</button>
                     )}
