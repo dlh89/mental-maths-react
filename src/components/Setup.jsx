@@ -155,6 +155,7 @@ const Setup = () => {
                                                             className="js-child-field"
                                                             checked={inputs['question_types'][type].options[optionSet][option]}
                                                             onChange={() => handleCheckboxChange(type, option)}
+                                                            disabled={!inputs['question_types'][type]['selected']}
                                                         />
                                                         <label htmlFor={`${type}_${option}`}>{option.replace('x', ' by ')}</label>
                                                     </Fragment>
