@@ -103,16 +103,18 @@ const Setup = () => {
         });
     }
 
-    const handleSubmit = ([event]) => {
-        event.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const params = new URLSearchParams();
-        Object.keys(inputs).forEach(([type, data]) => {
-            if (data.selected) {
-                params.append('question_types', type);
-                Object.entries(data.options).forEach(([option, checked]) => {
-                    if (checked) {
-                        params.append(`${type}_digits`, option);
-                    }
+        Object.keys(inputs.question_types).forEach((questionType) => {
+            if (inputs.question_types[questionType].selected) {
+                params.append('question_types', questionType);
+                Object.entries(inputs.question_types[questionType].options).forEach((optionSet, i) => {
+                    Object.keys(inputs.question_types[questionType].options[i]).forEach(key => {
+                        if (inputs.question_types[questionType].options[i][key]) {
+                            params.append(`${questionType}_digits`, key);
+                        }
+                    });
                 });
             }
         });
