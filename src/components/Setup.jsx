@@ -1,55 +1,78 @@
 import Header from './Header';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useNavigate  } from 'react-router-dom';
 
 const Setup = () => {
     const [inputs, setInputs] = useState({
         question_types: {
             multiplication: {
-                selected: true,
-                options: {
-                    "1x1": false,
-                    "1x2": false,
-                    "1x3": false,
-                    "1x4": false,
-                    "2x2": true,
-                    "2x3": false,
-                    "2x4": false,
-                    "3x3": false,
-                    "3x4": false,
-                    "4x4": false
-                }
+                selected: false,
+                options: [
+                    {
+                        "1x1": false,
+                        "1x2": false,
+                        "1x3": false,
+                        "1x4": false,
+                    },
+                    {
+                        "2x2": false,
+                        "2x3": false,
+                        "2x4": false,
+                    },
+                    {
+                        "3x3": false,
+                        "3x4": false,
+                    },
+                    {
+                        "4x4": false,
+                    },
+                ]
             },
             addition: {
                 selected: false,
-                options: {
-                    "1x1": false,
-                    "1x2": false,
-                    "1x3": false,
-                    "1x4": false,
-                    "2x2": false,
-                    "2x3": false,
-                    "2x4": false,
-                    "3x3": false,
-                    "3x4": false,
-                    "4x4": false
-                }
+                options: [
+                    {
+                        "1x1": false,
+                        "1x2": false,
+                        "1x3": false,
+                        "1x4": false,
+                    },
+                    {
+                        "2x2": false,
+                        "2x3": false,
+                        "2x4": false,
+                    },
+                    {
+                        "3x3": false,
+                        "3x4": false,
+                    },
+                    {
+                        "4x4": false,
+                    },
+                ]
             },
             subtraction: {
                 selected: false,
-                options: {
-                    "1x1": false,
-                    "1x2": false,
-                    "1x3": false,
-                    "1x4": false,
-                    "2x2": false,
-                    "2x3": false,
-                    "2x4": false,
-                    "3x3": false,
-                    "3x4": false,
-                    "4x4": false,
-                    include_negatives: false
-                }
+                options: [
+                    {
+                        "1x1": false,
+                        "1x2": false,
+                        "1x3": false,
+                        "1x4": false,
+                    },
+                    {
+                        "2x2": false,
+                        "2x3": false,
+                        "2x4": false,
+                    },
+                    {
+                        "3x3": false,
+                        "3x4": false,
+                    },
+                    {
+                        "4x4": false,
+                    },
+                ]
             },
         },
         repeat_incorrect_questions: false,
@@ -60,7 +83,11 @@ const Setup = () => {
         setInputs(prev => {
             const newState = { ...prev };
             if (option) {
-                newState['question_types'][type].options[option] = !newState['question_types'][type].options[option];
+                newState['question_types'][type].options.forEach((optionSet, i) => {
+                    if (Object.keys(optionSet).includes(option)) {
+                        newState['question_types'][type].options[i][option] = !newState['question_types'][type].options[i][option];
+                    }
+                })
             } else {
                 newState['question_types'][type].selected = !newState['question_types'][type].selected;
             }
@@ -116,22 +143,24 @@ const Setup = () => {
                                     <label htmlFor={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</label>
                                     <fieldset className="type-subset">
                                         <legend className="heading-3">Number of digits</legend>
-                                        <div>
-                                            {Object.keys(inputs['question_types'][type].options).map((option) => (
-                                                <div key={option}>
-                                                    <input
-                                                        type="checkbox"
-                                                        name={`${type}_digits`}
-                                                        id={`${type}_${option}`}
-                                                        value={option}
-                                                        className="js-child-field"
-                                                        checked={inputs['question_types'][type].options[option]}
-                                                        onChange={() => handleCheckboxChange(type, option)}
-                                                    />
-                                                    <label htmlFor={`${type}_${option}`}>{option.replace('x', ' by ')}</label>
-                                                </div>
-                                            ))}
-                                        </div>
+                                        {Object.keys(inputs['question_types'][type].options).map((optionSet) => (
+                                            <div key={type + '_' + optionSet}>
+                                                {Object.keys(inputs['question_types'][type].options[optionSet]).map((option) => (
+                                                    <Fragment key={type + '_' + optionSet + '_' + option}>
+                                                        <input
+                                                            type="checkbox"
+                                                            name={`${type}_digits`}
+                                                            id={`${type}_${option}`}
+                                                            value={option}
+                                                            className="js-child-field"
+                                                            checked={inputs['question_types'][type].options[optionSet][option]}
+                                                            onChange={() => handleCheckboxChange(type, option)}
+                                                        />
+                                                        <label htmlFor={`${type}_${option}`}>{option.replace('x', ' by ')}</label>
+                                                    </Fragment>
+                                                ))}
+                                            </div>
+                                        ))}
                                     </fieldset>
                                 </div>
                             ))}
