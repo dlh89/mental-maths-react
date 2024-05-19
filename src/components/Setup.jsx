@@ -1,5 +1,5 @@
 import Header from './Header';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef, useEffect } from 'react';
 import { useNavigate  } from 'react-router-dom';
 
 const Setup = () => {
@@ -77,6 +77,8 @@ const Setup = () => {
         },
         repeat_incorrect_questions: false,
     });
+    const [validationMessage, setValidationMessage] = useState('');
+    const alertDivRev = useRef(null);
     const navigate = useNavigate();
 
     function handleCheckboxChange(type, option = null) {
@@ -118,9 +120,43 @@ const Setup = () => {
                 });
             }
         });
-        const queryString = params.toString();
-        navigate(`/setup/play?${queryString}`);
+
+        const isValid = validateFormSubmission();
+        
+        if (isValid) {
+            navigate(`/setup/play?${params.toString()}`);
+        }
     }
+
+    const validateFormSubmission = () => {
+        const selectedQuestionTypes = Object.keys(inputs.question_types).filter((questionType) => {
+            return inputs.question_types[questionType].selected;
+        });
+        
+        if (selectedQuestionTypes.length) {
+            const allSelectedQuestionTypesHaveSelectedOptions = selectedQuestionTypes.every((questionType) => {
+                return inputs.question_types[questionType].options.some((option) => {
+                    return Object.values(option).some(value => value);
+                });
+            });
+
+            if (allSelectedQuestionTypesHaveSelectedOptions) {
+                return true;
+            } else {
+                setValidationMessage('Please select at least one digit type for all question types.');
+            }
+        } else {
+            setValidationMessage('Please select at least one question type.');
+        }
+
+        return false;
+    }
+
+    useEffect(() => {
+        if (alertDivRev.current) {
+            alertDivRev.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, [validationMessage]);
 
     return (
         <div>
@@ -128,6 +164,11 @@ const Setup = () => {
             <div className="container">
                 <h1 className="display-2">Mental Maths</h1>
                 <div className="js-pre-start mb-5">
+                    {validationMessage && (
+                        <div class="alert alert-warning" role="alert" ref={alertDivRev}>
+                            {validationMessage}
+                        </div>
+                    )}
                     <form method="get" onSubmit={handleSubmit}>
                         <fieldset className="start-form__fieldset">
                             <legend className="heading-2">Question types</legend>
