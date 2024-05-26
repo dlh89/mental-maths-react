@@ -1,5 +1,5 @@
 import Header from './Header';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, Fragment } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ReactComponent as Tick } from '../images/tick.svg';
 import { ReactComponent as Cross } from '../images/cross.svg';
@@ -22,13 +22,25 @@ const Play = () => {
 
     const [averageTimeToAnswer, setAverageTimeToAnswer] = useState(0);
     const [timer, setTimer] = useState(0);
-    const [timerIntervalId, setTimerIntervalId] = useState(false);
+    const timerRef = useRef(null);
+    const [question, setQuestion] = useState(false);
 
-    useEffect(() => {
-        setTimerIntervalId(setInterval(() => setTimer(timer => timer + 1), 1000));
+    const startTimer = () => {
+        if (timerRef.current !== null) return; // Prevent multiple timers
+        timerRef.current = setInterval(() => {
+          setTimer(prevTime => prevTime + 1);
+        }, 1000);
+      };
     
-        return () => clearInterval(timerIntervalId);
-      }, []);
+    const stopTimer = () => {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+    };
+
+    const handleAnswer = () => {
+        stopTimer();
+        // TODO update score, show mark buttons
+    }
 
     return (
         <div>
@@ -48,9 +60,13 @@ const Play = () => {
                         <div>{timer}</div>
                     </div>
                     <div className="question">
-                        <span className="js-question"></span> = <span className="js-answer-text question__answer"></span>
+                        {question && (
+                            <Fragment>
+                                {question} = { question.answer && (<span className="question__answer">{question.answer}</span>) }
+                            </Fragment>
+                        )}
                     </div>
-                    <button className="btn btn-primary btn-lg js-show-answer">Answer</button>
+                    <button className="btn btn-primary btn-lg" onClick={handleAnswer}>Answer</button>
                 </div>
             </div>
         </div>
