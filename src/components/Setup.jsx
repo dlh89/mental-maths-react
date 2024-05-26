@@ -121,6 +121,10 @@ const Setup = () => {
             }
         });
 
+        if (inputs.repeat_incorrect_questions) {
+            params.append('repeat_incorrect_questions', 1);
+        }
+
         const isValid = validateFormSubmission();
         
         if (isValid) {
@@ -165,7 +169,7 @@ const Setup = () => {
                 <h1 className="display-2">Mental Maths</h1>
                 <div className="js-pre-start mb-5">
                     {validationMessage && (
-                        <div class="alert alert-warning" role="alert" ref={alertDivRev}>
+                        <div className="alert alert-warning" role="alert" ref={alertDivRev}>
                             {validationMessage}
                         </div>
                     )}
