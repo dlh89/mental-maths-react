@@ -28,6 +28,7 @@ label {
 
 .timer {
   display: flex;
+  gap: 4px;
   align-items: center;
   opacity: .75;
   font-size: 20px;
@@ -39,16 +40,17 @@ label {
 
 .scoreboard {
   display: flex;
+  gap: 6px;
   margin-bottom: 18px;
 }
 
 .scoreboard__score {
+  display: flex;
+  gap: 6px;
   background-color: #198754;
   color: #fff;
-}
-
-.scoreboard__score:not(:last-child) {
-  margin-right: 4px;
+  padding: 6px 8px;
+  font-size: 14px;
 }
 
 .scoreboard__score--incorrect {
@@ -72,7 +74,8 @@ label {
 }
 
 .badge-icon {
-  margin-right: 6px;
+  width: 14px;
+  height: 14px;
 }
 
 .end-session-btn {
