@@ -99,7 +99,7 @@ label {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #c5c5c5;
-  min-height: 45px;
+  min-height: 65px;
   margin-bottom: 30px;
 }
 
@@ -107,6 +107,10 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.header__link {
+  text-decoration: none;
+  color: #212529;
 }
 
 .header__link.active {
