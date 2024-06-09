@@ -102,9 +102,9 @@ export const swapQuestion = (question) => {
  * @returns {string}
  */
 export const getQuestionAndAnswerText = (question) => {
-    const answer = this.getAnswer(question);
+    const answer = getAnswer(question);
 
-    return `${question.first} ${this.getSymbol(question.type)} ${question.second} = ${answer}`;
+    return `${question.first} ${getSymbol(question.type)} ${question.second} = ${answer}`;
 }
 
 /**
@@ -121,7 +121,7 @@ export const buildHelpText = (questions) => {
             continue;
         }
 
-        helpText += '\n' + this.getQuestionAndAnswerText(question);
+        helpText += '\n' + getQuestionAndAnswerText(question);
     }
 
     return helpText;
@@ -181,9 +181,9 @@ export const getResultsByQuestionType = (results) => {
     results.answers.forEach((answer) => {
         answer.date = new Date(results.startTime).toLocaleDateString('en-GB');
         answer.dateTime = results.startTime;
-        resultsByQuestionType = this.addPropertyIfNotExists(resultsByQuestionType, answer.type, 'obj');
+        resultsByQuestionType = addPropertyIfNotExists(resultsByQuestionType, answer.type, 'obj');
         answer.numDigits = `${answer.firstNumDigits}x${answer.secondNumDigits}`;
-        resultsByQuestionType[answer.type] = this.addPropertyIfNotExists(resultsByQuestionType[answer.type], answer.numDigits);
+        resultsByQuestionType[answer.type] = addPropertyIfNotExists(resultsByQuestionType[answer.type], answer.numDigits);
         resultsByQuestionType[answer.type][answer.numDigits].push(answer);
     });
 

@@ -121,3 +121,7 @@ label {
   display: flex;
   gap: 20px;
 }
+
+.answer-help {
+  white-space: pre-wrap;
+}

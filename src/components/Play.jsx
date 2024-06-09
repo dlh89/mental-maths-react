@@ -11,6 +11,7 @@ import {
     getSymbol,
     getAnswer
 } from '../utils/helpers';
+import multiplication from '../utils/multiplication';
 
 const Play = () => {
     const [searchParams] = useSearchParams();
@@ -38,6 +39,7 @@ const Play = () => {
     const [questionIsAnswered, setQuestionIsAnswered] = useState(false);
     const [answer, setAnswer] = useState(false);
     const [readyForNextQuestion, setReadyForNextQuestion] = useState(false);
+    const [answerHelp, setAnswerHelp] = useState('');
 
     const startTimer = () => {
         setTimer(0);
@@ -65,6 +67,7 @@ const Play = () => {
             getNewQuestion();
         }
 
+        setAnswerHelp('');
         setQuestionIsAnswered(false);
         startTimer();
     }
@@ -177,6 +180,8 @@ const Play = () => {
         setQuestionIsAnswered(true);
         stopTimer();
         setAnswer(getAnswer(question));
+        // TODO answerHelpText
+        setAnswerHelp(multiplication.getAnswerHelp(question));
     }
 
     const handleMark = (isCorrect) => {
@@ -242,6 +247,11 @@ const Play = () => {
                             </Fragment>
                         )}
                     </div>
+                    {answerHelp && (
+                        <div class="answer-help mb-4">
+                            {answerHelp}
+                        </div>
+                    )}
                     {!questionIsAnswered && (
                         <button className="btn btn-primary btn-lg" onClick={handleAnswer}>Answer</button>
                     )}
