@@ -37,6 +37,7 @@ const Play = () => {
     const [questionsSinceRepeat, setQuestionsSinceRepeat] = useState(0);
     const [questionIsAnswered, setQuestionIsAnswered] = useState(false);
     const [answer, setAnswer] = useState(false);
+    const [readyForNextQuestion, setReadyForNextQuestion] = useState(false);
 
     const startTimer = () => {
         setTimer(0);
@@ -54,11 +55,8 @@ const Play = () => {
     const nextQuestion = () => {
         if (queue.length) {
             if (questionsSinceRepeat >= 1) {
-                setQuestion(queue.shift());
+                setQuestion(queue[0]);
                 setQueue((prevItems) => prevItems.slice(1));
-                if (!queue.length) {
-                    setQuestionsSinceRepeat(0);
-                }
             } else {
                 getNewQuestion();
                 setQuestionsSinceRepeat(questionsSinceRepeat + 1);
@@ -198,8 +196,21 @@ const Play = () => {
         if (!isCorrect && repeatIncorrectQuestions) {
             setQueue((prevItems) => [...prevItems, question]);
         }
-        nextQuestion();
+        setReadyForNextQuestion(true);
     }
+
+    useEffect(() => {
+        if (!queue.length) {
+            setQuestionsSinceRepeat(0);
+        }
+    }, [queue]);
+
+    useEffect(() => {
+        if (readyForNextQuestion) {
+            setReadyForNextQuestion(false);
+            nextQuestion();
+        }
+    }, [readyForNextQuestion])
 
     useEffect(() => {
         // Start game
