@@ -5,6 +5,7 @@ import { ReactComponent as Tick } from '../images/tick.svg';
 import { ReactComponent as Cross } from '../images/cross.svg';
 import { ReactComponent as StopwatchWhite } from '../images/stopwatch-white.svg';
 import { ReactComponent as StopwatchBlack } from '../images/stopwatch.svg';
+import { useAuth } from '../AuthContext';
 import {
     getRandomElement,
     getDigitsArr,
@@ -12,6 +13,7 @@ import {
     getAnswer
 } from '../utils/helpers';
 import multiplication from '../utils/multiplication';
+import { pushResultsToDb } from '../firebase-service';
 
 const Play = () => {
     const [searchParams] = useSearchParams();
@@ -40,6 +42,9 @@ const Play = () => {
     const [answer, setAnswer] = useState(false);
     const [readyForNextQuestion, setReadyForNextQuestion] = useState(false);
     const [answerHelp, setAnswerHelp] = useState('');
+    const shouldPushResults = useRef(false);
+
+    const user = useAuth();
 
     const startTimer = () => {
         setTimer(0);
@@ -180,7 +185,6 @@ const Play = () => {
         setQuestionIsAnswered(true);
         stopTimer();
         setAnswer(getAnswer(question));
-        // TODO answerHelpText
         setAnswerHelp(multiplication.getAnswerHelp(question));
     }
 
@@ -204,6 +208,20 @@ const Play = () => {
         setReadyForNextQuestion(true);
     }
 
+    const handleEndSession = () => {
+        // TODO render results
+
+        const shouldEndSession = window.confirm('Are you sure you want to end the session?');
+        if (!shouldEndSession) {
+            return;
+        }
+        shouldPushResults.current = true;
+        setScore(prevItems => ({
+            ...prevItems,
+            endTime: new Date().getTime()
+        }));
+    }
+
     useEffect(() => {
         if (!queue.length) {
             setQuestionsSinceRepeat(0);
@@ -216,6 +234,12 @@ const Play = () => {
             nextQuestion();
         }
     }, [readyForNextQuestion])
+
+    useEffect(() => {
+        if (shouldPushResults.current && user?.currentUser?.uid) {
+            pushResultsToDb(user.currentUser.uid, score);
+        }
+    }, [score, user]);
 
     useEffect(() => {
         // Start game
@@ -248,7 +272,7 @@ const Play = () => {
                         )}
                     </div>
                     {answerHelp && (
-                        <div class="answer-help mb-4">
+                        <div className="answer-help mb-4">
                             {answerHelp}
                         </div>
                     )}
@@ -260,6 +284,11 @@ const Play = () => {
                             <p>Did you get the correct answer?</p>
                             <button className="btn btn-lg btn-success" onClick={(() => handleMark(true))}><Tick className="badge-icon"/> Yes</button>
                             <button className="btn btn-lg btn-danger" onClick={(() => handleMark(false))}><Cross className="badge-icon"/> No</button>
+                        </div>
+                    )}
+                    {score.answers.length > 0 && (
+                        <div className="mt-3">
+                            <button className="btn btn-secondary" onClick={handleEndSession}>End session</button>
                         </div>
                     )}
                 </div>
