@@ -10,7 +10,10 @@ import {
     getRandomElement,
     getDigitsArr,
     getSymbol,
-    getAnswer
+    getAnswer,
+    getPercentageString,
+    getFormattedMilliseconds,
+    getResultsByQuestionType
 } from '../utils/helpers';
 import multiplication from '../utils/multiplication';
 import { pushResultsToDb } from '../firebase-service';
@@ -42,7 +45,8 @@ const Play = () => {
     const [answer, setAnswer] = useState(false);
     const [readyForNextQuestion, setReadyForNextQuestion] = useState(false);
     const [answerHelp, setAnswerHelp] = useState('');
-    const shouldPushResults = useRef(false);
+    const [resultsByQuestionType, setResultsByQuestionType] = useState([]);
+    const isSessionEnded = useRef(false);
 
     const user = useAuth();
 
@@ -208,19 +212,51 @@ const Play = () => {
         setReadyForNextQuestion(true);
     }
 
-    const handleEndSession = () => {
-        // TODO render results
+    const getTotalCorrectAnswers = () => {
+        return score.answers.reduce((accumulator, answer) => {
+            if (answer.isCorrect) {
+                accumulator++;
+            }
+            return accumulator;
+        }, 0);
+    };
 
+    const handleEndSession = () => {
         const shouldEndSession = window.confirm('Are you sure you want to end the session?');
         if (!shouldEndSession) {
             return;
         }
-        shouldPushResults.current = true;
+        isSessionEnded.current = true;
         setScore(prevItems => ({
             ...prevItems,
             endTime: new Date().getTime()
         }));
+
+        setResultsByQuestionType(getResultsByQuestionType(score));
     }
+
+    const renderQuestionTypeDigits = (questionType) => {
+        switch (questionType) {
+            case 'multiplication':
+                return (
+                    <Fragment>
+                        {multiplicationDigits.map(multiplicationDigit => (
+                            <div key={multiplicationDigit}>
+                                <h5>{multiplicationDigit}</h5>
+                            </div>
+                        ))}
+                    </Fragment>
+                );
+            case 'addition':
+                return null;
+            case 'subtraction':
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    const capitaliseFirstChar = str => str.charAt(0).toUpperCase() + str.slice(1);
 
     useEffect(() => {
         if (!queue.length) {
@@ -236,7 +272,7 @@ const Play = () => {
     }, [readyForNextQuestion])
 
     useEffect(() => {
-        if (shouldPushResults.current && user?.currentUser?.uid) {
+        if (isSessionEnded.current && user?.currentUser?.uid) {
             pushResultsToDb(user.currentUser.uid, score);
         }
     }, [score, user]);
@@ -252,46 +288,65 @@ const Play = () => {
             <Header />
             <div className="container">
                 <h1 className="display-2">Mental Maths</h1>
-                <div>
-                    <div className="scoreboard">
-                        <div className="scoreboard__score badge" title="Correctly answered questions"><Tick className="badge-icon" />{score.correct}</div>
-                        <div className="scoreboard__score badge scoreboard__score--incorrect" title="Incorrectly answered questions"><Cross className="badge-icon" />{score.incorrect}</div>
-                        <div className="scoreboard__score badge scoreboard__score--average-time" title="Average time to answer">
-                            <StopwatchWhite className="badge-icon" /> {averageTimeToAnswer}
+                {!isSessionEnded.current ? (
+                    <div>
+                        <div className="scoreboard">
+                            <div className="scoreboard__score badge" title="Correctly answered questions"><Tick className="badge-icon" />{score.correct}</div>
+                            <div className="scoreboard__score badge scoreboard__score--incorrect" title="Incorrectly answered questions"><Cross className="badge-icon" />{score.incorrect}</div>
+                            <div className="scoreboard__score badge scoreboard__score--average-time" title="Average time to answer">
+                                <StopwatchWhite className="badge-icon" /> {averageTimeToAnswer}
+                            </div>
                         </div>
-                    </div>
-                    <div className="timer">
-                        <StopwatchBlack />
-                        <div>{timer}</div>
-                    </div>
-                    <div className="question">
-                        {question && (
-                            <Fragment>
-                                {question.first} {getSymbol(question.type)} {question.second} = { questionIsAnswered && (<span className="question__answer">{answer}</span>) }
-                            </Fragment>
+                        <div className="timer">
+                            <StopwatchBlack />
+                            <div>{timer}</div>
+                        </div>
+                        <div className="question">
+                            {question && (
+                                <Fragment>
+                                    {question.first} {getSymbol(question.type)} {question.second} = { questionIsAnswered && (<span className="question__answer">{answer}</span>) }
+                                </Fragment>
+                            )}
+                        </div>
+                        {answerHelp && (
+                            <div className="answer-help mb-4">
+                                {answerHelp}
+                            </div>
+                        )}
+                        {!questionIsAnswered && (
+                            <button className="btn btn-primary btn-lg" onClick={handleAnswer}>Answer</button>
+                        )}
+                        {questionIsAnswered && (
+                            <div>
+                                <p>Did you get the correct answer?</p>
+                                <button className="btn btn-lg btn-success" onClick={(() => handleMark(true))}><Tick className="badge-icon"/> Yes</button>
+                                <button className="btn btn-lg btn-danger" onClick={(() => handleMark(false))}><Cross className="badge-icon"/> No</button>
+                            </div>
+                        )}
+                        {score.answers.length > 0 && (
+                            <div className="mt-3">
+                                <button className="btn btn-secondary" onClick={handleEndSession}>End session</button>
+                            </div>
                         )}
                     </div>
-                    {answerHelp && (
-                        <div className="answer-help mb-4">
-                            {answerHelp}
-                        </div>
-                    )}
-                    {!questionIsAnswered && (
-                        <button className="btn btn-primary btn-lg" onClick={handleAnswer}>Answer</button>
-                    )}
-                    {questionIsAnswered && (
-                        <div>
-                            <p>Did you get the correct answer?</p>
-                            <button className="btn btn-lg btn-success" onClick={(() => handleMark(true))}><Tick className="badge-icon"/> Yes</button>
-                            <button className="btn btn-lg btn-danger" onClick={(() => handleMark(false))}><Cross className="badge-icon"/> No</button>
-                        </div>
-                    )}
-                    {score.answers.length > 0 && (
-                        <div className="mt-3">
-                            <button className="btn btn-secondary" onClick={handleEndSession}>End session</button>
-                        </div>
-                    )}
-                </div>
+                ) : (
+                    <div>
+                        <h2 className="heading-2">Results</h2>
+                        <h3>Overall</h3>
+                        <p>{getTotalCorrectAnswers()} / {score.answers.length} ({getPercentageString(getTotalCorrectAnswers(), score.answers.length)})</p>
+                        <h3>Question types</h3>
+                        {questionTypes.map(questionType => (
+                            <Fragment key={questionType}>
+                                <h4>{capitaliseFirstChar(questionType)}</h4>
+                                {renderQuestionTypeDigits(questionType)}
+                            </Fragment>
+                        ))}                        
+                        <h3>Average time to answer</h3>
+                        <p>{averageTimeToAnswer} {averageTimeToAnswer === 1 ? 'second' : 'seconds'}</p>
+                        <h3>Session length</h3>
+                        <p>{getFormattedMilliseconds(Math.abs(score.endTime - score.startTime))}</p>
+                    </div>   
+                )}
             </div>
         </div>
     );
