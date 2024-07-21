@@ -212,14 +212,22 @@ const Play = () => {
         setReadyForNextQuestion(true);
     }
 
-    const getTotalCorrectAnswers = () => {
-        return score.answers.reduce((accumulator, answer) => {
+    const getTotalCorrectAnswers = (answers) => {
+        return answers.reduce((accumulator, answer) => {
             if (answer.isCorrect) {
                 accumulator++;
             }
             return accumulator;
         }, 0);
     };
+
+    const getAverageTimeToAnswer = (answers) => {
+        const totalTimeToAnswer = answers.reduce((accumulator, answer) => {
+            return accumulator += answer.timeToAnswer;
+        }, 0);
+
+        return Math.round(totalTimeToAnswer / answers.length);
+    }
 
     const handleEndSession = () => {
         const shouldEndSession = window.confirm('Are you sure you want to end the session?');
@@ -240,9 +248,11 @@ const Play = () => {
             case 'multiplication':
                 return (
                     <Fragment>
-                        {multiplicationDigits.map(multiplicationDigit => (
+                        {Object.keys(resultsByQuestionType['multiplication']).map(multiplicationDigit => (
                             <div key={multiplicationDigit}>
                                 <h5>{multiplicationDigit}</h5>
+                                <p><strong>Score:</strong> {getTotalCorrectAnswers(resultsByQuestionType['multiplication'][multiplicationDigit])} / {resultsByQuestionType['multiplication'][multiplicationDigit].length}</p>
+                                <p><strong>Average time to answer:</strong> {getAverageTimeToAnswer(resultsByQuestionType['multiplication'][multiplicationDigit])} seconds</p>
                             </div>
                         ))}
                     </Fragment>
@@ -267,6 +277,7 @@ const Play = () => {
     useEffect(() => {
         if (readyForNextQuestion) {
             setReadyForNextQuestion(false);
+            setAverageTimeToAnswer(getAverageTimeToAnswer(score.answers));
             nextQuestion();
         }
     }, [readyForNextQuestion])
@@ -333,18 +344,18 @@ const Play = () => {
                     <div>
                         <h2 className="heading-2">Results</h2>
                         <h3>Overall</h3>
-                        <p>{getTotalCorrectAnswers()} / {score.answers.length} ({getPercentageString(getTotalCorrectAnswers(), score.answers.length)})</p>
+                        <p>{getTotalCorrectAnswers(score.answers)} / {score.answers.length} ({getPercentageString(getTotalCorrectAnswers(score.answers), score.answers.length)})</p>                 
+                        <h3>Average time to answer</h3>
+                        <p>{averageTimeToAnswer} {averageTimeToAnswer === 1 ? 'second' : 'seconds'}</p>
+                        <h3>Session length</h3>
+                        <p>{getFormattedMilliseconds(Math.abs(score.endTime - score.startTime))}</p>
                         <h3>Question types</h3>
                         {questionTypes.map(questionType => (
                             <Fragment key={questionType}>
                                 <h4>{capitaliseFirstChar(questionType)}</h4>
                                 {renderQuestionTypeDigits(questionType)}
                             </Fragment>
-                        ))}                        
-                        <h3>Average time to answer</h3>
-                        <p>{averageTimeToAnswer} {averageTimeToAnswer === 1 ? 'second' : 'seconds'}</p>
-                        <h3>Session length</h3>
-                        <p>{getFormattedMilliseconds(Math.abs(score.endTime - score.startTime))}</p>
+                        ))}
                     </div>   
                 )}
             </div>
