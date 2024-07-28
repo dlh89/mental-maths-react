@@ -89,11 +89,11 @@ export const getDigit = (number, digit) => {
 }
 
 export const swapQuestion = (question) => {
-    const tempSecond = question.second;
-    question.second = question.first;
-    question.first = tempSecond;
-
-    return question;
+    return {
+        ...question,
+        first: question.second,
+        second: question.first,
+    };
 }
 
  /**
