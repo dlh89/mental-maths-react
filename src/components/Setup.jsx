@@ -98,18 +98,10 @@ const Setup = () => {
         });
     }
 
-    function handleSubtractionIncludeNegativesCheckboxChange() {
+    function toggleCheckboxState(key) {
         setInputs(prev => {
             const newState = { ...prev };
-            newState['subtraction_include_negatives'] = !newState['subtraction_include_negatives'];
-            return newState;
-        });
-    }
-
-    function handleRepeatIncorrectCheckboxChange() {
-        setInputs(prev => {
-            const newState = { ...prev };
-            newState['repeat_incorrect_questions'] = !newState['repeat_incorrect_questions'];
+            newState[key] = !newState[key];
             return newState;
         });
     }
@@ -229,7 +221,7 @@ const Setup = () => {
                                                     name="subtraction_include_negatives" 
                                                     id="subtraction_include_negatives" 
                                                     value="subtraction_include_negatives" 
-                                                    onChange={() => handleSubtractionIncludeNegativesCheckboxChange()}
+                                                    onChange={() => toggleCheckboxState('subtraction_include_negatives')}
                                                     checked={inputs['subtraction_include_negatives']}
                                                     disabled={!inputs['question_types'][type]['selected']}
                                                 ></input>
@@ -245,7 +237,7 @@ const Setup = () => {
                                 name="repeat_incorrect_questions" 
                                 id="repeat_incorrect_questions" 
                                 value="repeat_incorrect_questions" 
-                                onChange={() => handleRepeatIncorrectCheckboxChange()} 
+                                onChange={() => toggleCheckboxState('repeat_incorrect_questions')} 
                                 checked={inputs['repeat_incorrect_questions']}
                             ></input>
                             <label htmlFor="repeat_incorrect_questions">Repeat incorrectly answered questions</label>
