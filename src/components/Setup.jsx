@@ -75,6 +75,7 @@ const Setup = () => {
                 ]
             },
         },
+        subtraction_include_negatives: false,
         repeat_incorrect_questions: false,
     });
     const [validationMessage, setValidationMessage] = useState('');
@@ -93,6 +94,14 @@ const Setup = () => {
             } else {
                 newState['question_types'][type].selected = !newState['question_types'][type].selected;
             }
+            return newState;
+        });
+    }
+
+    function handleSubtractionIncludeNegativesCheckboxChange() {
+        setInputs(prev => {
+            const newState = { ...prev };
+            newState['subtraction_include_negatives'] = !newState['subtraction_include_negatives'];
             return newState;
         });
     }
@@ -120,6 +129,10 @@ const Setup = () => {
                 });
             }
         });
+
+        if (inputs.subtraction_include_negatives) {
+            params.append('subtraction_include_negatives', 1);
+        }
 
         if (inputs.repeat_incorrect_questions) {
             params.append('repeat_incorrect_questions', 1);
@@ -209,12 +222,32 @@ const Setup = () => {
                                                 ))}
                                             </div>
                                         ))}
+                                        {type === 'subtraction' && (
+                                            <div>
+                                                <input 
+                                                    type="checkbox" 
+                                                    name="subtraction_include_negatives" 
+                                                    id="subtraction_include_negatives" 
+                                                    value="subtraction_include_negatives" 
+                                                    onChange={() => handleSubtractionIncludeNegativesCheckboxChange()}
+                                                    checked={inputs['subtraction_include_negatives']}
+                                                    disabled={!inputs['question_types'][type]['selected']}
+                                                ></input>
+                                                <label htmlFor="subtraction_include_negatives">Include questions with negative results</label>
+                                            </div>
+                                        )}
                                     </fieldset>
                                 </div>
                             ))}
                         </fieldset>
                         <fieldset>
-                            <input type="checkbox" name="repeat_incorrect_questions" id="repeat_incorrect_questions" value="repeat_incorrect_questions" onChange={() => handleRepeatIncorrectCheckboxChange()} checked={inputs['repeat_incorrect_questions']}></input>
+                            <input type="checkbox"
+                                name="repeat_incorrect_questions" 
+                                id="repeat_incorrect_questions" 
+                                value="repeat_incorrect_questions" 
+                                onChange={() => handleRepeatIncorrectCheckboxChange()} 
+                                checked={inputs['repeat_incorrect_questions']}
+                            ></input>
                             <label htmlFor="repeat_incorrect_questions">Repeat incorrectly answered questions</label>
                         </fieldset>
                         <input type="submit" value="Start" className="btn btn-primary btn-lg mt-3"></input>
