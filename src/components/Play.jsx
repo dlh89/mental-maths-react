@@ -189,7 +189,9 @@ const Play = () => {
         setQuestionIsAnswered(true);
         stopTimer();
         setAnswer(getAnswer(question));
-        setAnswerHelp(multiplication.getAnswerHelp(question));
+        if (question.type === 'multiplication') {
+            setAnswerHelp(multiplication.getAnswerHelp(question));
+        }
     }
 
     const handleMark = (isCorrect) => {
