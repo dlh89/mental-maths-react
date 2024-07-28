@@ -4,7 +4,8 @@ import {
     getAnswer,
     buildHelpText,
     swapQuestion
- } from './helpers.js';
+} from './helpers.js';
+import dedent from 'dedent-js';
 
 class Multiplication
 {
@@ -32,7 +33,7 @@ class Multiplication
             }
         }
 
-        return answerHelp;
+        return dedent(answerHelp);
     }
 
     shouldUseSubtractionMethod(question) {
@@ -125,8 +126,8 @@ class Multiplication
         let answerAdditionString;
         if (addition > 9) {
             answer = ((firstDigit * 10) + addition).toString() + secondDigit;
-            answerAdditionString = `(${(firstDigit * 10)} + ${addition}) = ${(firstDigit * 10) + addition}
-            (${(firstDigit * 10) + addition})${secondDigit}`
+            answerAdditionString = dedent(`(${(firstDigit * 10)} + ${addition}) = ${(firstDigit * 10) + addition}
+            (${(firstDigit * 10) + addition})${secondDigit}`);
         } else {
             answer = firstDigit.toString() + addition + secondDigit.toString();
             answerAdditionString = `${firstDigit.toString()}(${firstDigit + secondDigit})${secondDigit.toString()}`;
