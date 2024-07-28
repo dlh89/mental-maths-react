@@ -24,8 +24,8 @@ const Play = () => {
     const [multiplicationDigits, setMultiplicationDigits] = useState(searchParams.getAll('multiplication_digits'));
     const [additionDigits, setAdditionDigits] = useState(searchParams.getAll('addition_digits'));
     const [subtractionDigits, setSubtractionDigits] = useState(searchParams.getAll('subtraction_digits'));
-    const [includeSubtractionNegatives, setIncludeSubtractionNegatives] = useState(searchParams.getAll('include_negatives'));
-    const [repeatIncorrectQuestions, setRepeatIncorrectQuestions] = useState(searchParams.getAll('repeat_incorrect_questions'));
+    const [includeSubtractionNegatives, setIncludeSubtractionNegatives] = useState(searchParams.get('include_negatives'));
+    const [repeatIncorrectQuestions, setRepeatIncorrectQuestions] = useState(searchParams.get('repeat_incorrect_questions'));
 
     const [score, setScore] = useState({
         answers: [],
