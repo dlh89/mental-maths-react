@@ -352,8 +352,10 @@ const Play = () => {
                         {questionIsAnswered && (
                             <div>
                                 <p>Did you get the correct answer?</p>
-                                <button className="btn btn-lg btn-success" onClick={(() => handleMark(true))}><Tick className="badge-icon"/> Yes</button>
-                                <button className="btn btn-lg btn-danger" onClick={(() => handleMark(false))}><Cross className="badge-icon"/> No</button>
+                                <div className="answer-btns">
+                                    <button className="btn btn-lg btn-success" onClick={(() => handleMark(true))}><Tick className="badge-icon"/> Yes</button>
+                                    <button className="btn btn-lg btn-danger" onClick={(() => handleMark(false))}><Cross className="badge-icon"/> No</button>
+                                </div>
                             </div>
                         )}
                         {score.answers.length > 0 && (

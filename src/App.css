@@ -125,3 +125,8 @@ label {
 .answer-help {
   white-space: pre-wrap;
 }
+
+.answer-btns {
+  display: flex;
+  gap: 8px;
+}
