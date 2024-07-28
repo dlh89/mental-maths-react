@@ -258,9 +258,29 @@ const Play = () => {
                     </Fragment>
                 );
             case 'addition':
-                return null;
+                return (
+                    <Fragment>
+                        {Object.keys(resultsByQuestionType['addition']).map(additionDigit => (
+                            <div key={additionDigit}>
+                                <h5>{additionDigit}</h5>
+                                <p><strong>Score:</strong> {getTotalCorrectAnswers(resultsByQuestionType['addition'][additionDigit])} / {resultsByQuestionType['addition'][additionDigit].length}</p>
+                                <p><strong>Average time to answer:</strong> {getAverageTimeToAnswer(resultsByQuestionType['addition'][additionDigit])} seconds</p>
+                            </div>
+                        ))}
+                    </Fragment>
+                );
             case 'subtraction':
-                return null;
+                return (
+                    <Fragment>
+                        {Object.keys(resultsByQuestionType['subtraction']).map(subtractionDigit => (
+                            <div key={subtractionDigit}>
+                                <h5>{subtractionDigit}</h5>
+                                <p><strong>Score:</strong> {getTotalCorrectAnswers(resultsByQuestionType['subtraction'][subtractionDigit])} / {resultsByQuestionType['subtraction'][subtractionDigit].length}</p>
+                                <p><strong>Average time to answer:</strong> {getAverageTimeToAnswer(resultsByQuestionType['subtraction'][subtractionDigit])} seconds</p>
+                            </div>
+                        ))}
+                    </Fragment>
+                );
             default:
                 return null;
         }
