@@ -1,6 +1,6 @@
 import Header from './Header';
 import { useEffect, useState, useRef, Fragment } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { ReactComponent as Tick } from '../images/tick.svg';
 import { ReactComponent as Cross } from '../images/cross.svg';
 import { ReactComponent as StopwatchWhite } from '../images/stopwatch-white.svg';
@@ -358,6 +358,9 @@ const Play = () => {
                                 </div>
                             </div>
                         )}
+                        <div className="mt-3">
+                            <Link to="/setup">Change settings</Link>
+                        </div>
                         {score.answers.length > 0 && (
                             <div className="mt-3">
                                 <button className="btn btn-secondary" onClick={handleEndSession}>End session</button>
