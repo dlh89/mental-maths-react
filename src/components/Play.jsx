@@ -20,12 +20,12 @@ import { pushResultsToDb } from '../firebase-service';
 
 const Play = () => {
     const [searchParams] = useSearchParams();
-    const [questionTypes, setQuestionTypes] = useState(searchParams.getAll('question_types'));
-    const [multiplicationDigits, setMultiplicationDigits] = useState(searchParams.getAll('multiplication_digits'));
-    const [additionDigits, setAdditionDigits] = useState(searchParams.getAll('addition_digits'));
-    const [subtractionDigits, setSubtractionDigits] = useState(searchParams.getAll('subtraction_digits'));
-    const [includeSubtractionNegatives, setIncludeSubtractionNegatives] = useState(searchParams.get('subtraction_include_negatives'));
-    const [repeatIncorrectQuestions, setRepeatIncorrectQuestions] = useState(searchParams.get('repeat_incorrect_questions'));
+    const [questionTypes] = useState(searchParams.getAll('question_types'));
+    const [multiplicationDigits] = useState(searchParams.getAll('multiplication_digits'));
+    const [additionDigits] = useState(searchParams.getAll('addition_digits'));
+    const [subtractionDigits] = useState(searchParams.getAll('subtraction_digits'));
+    const [includeSubtractionNegatives] = useState(searchParams.get('subtraction_include_negatives'));
+    const [repeatIncorrectQuestions] = useState(searchParams.get('repeat_incorrect_questions'));
 
     const [score, setScore] = useState({
         answers: [],
