@@ -320,7 +320,7 @@ const Play = () => {
                             <div className="scoreboard__score badge" title="Correctly answered questions"><Tick className="badge-icon" />{score.correct}</div>
                             <div className="scoreboard__score badge scoreboard__score--incorrect" title="Incorrectly answered questions"><Cross className="badge-icon" />{score.incorrect}</div>
                             <div className="scoreboard__score badge scoreboard__score--average-time" title="Average time to answer">
-                                <StopwatchWhite className="badge-icon" /> {averageTimeToAnswer}
+                                <StopwatchWhite className="badge-icon" /> {Math.round(averageTimeToAnswer)}
                             </div>
                         </div>
                         <div className="timer">
