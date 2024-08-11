@@ -13,7 +13,8 @@ import {
     getAnswer,
     getPercentageString,
     getFormattedMilliseconds,
-    getResultsByQuestionType
+    getResultsByQuestionType,
+    getAverageTimeToAnswer
 } from '../utils/helpers';
 import multiplication from '../utils/multiplication';
 import { pushResultsToDb } from '../firebase-service';
@@ -222,14 +223,6 @@ const Play = () => {
             return accumulator;
         }, 0);
     };
-
-    const getAverageTimeToAnswer = (answers) => {
-        const totalTimeToAnswer = answers.reduce((accumulator, answer) => {
-            return accumulator += answer.timeToAnswer;
-        }, 0);
-
-        return Math.round(totalTimeToAnswer / answers.length);
-    }
 
     const handleEndSession = () => {
         const shouldEndSession = window.confirm('Are you sure you want to end the session?');

@@ -189,3 +189,31 @@ export const getResultsByQuestionType = (results) => {
 
     return resultsByQuestionType;
 }
+
+export const getCorrectAnswerCount = (answers) => {
+    return answers.reduce((accum, answer) => {
+        if (answer.isCorrect) {
+            accum++;
+        }
+        return accum;
+    }, 0);
+}
+
+/**
+ * Returns session length in milliseconds
+ * 
+ * @param {string} startTime 
+ * @param {string} endTime 
+ * @returns string
+ */
+export const getSessionLength = (startTime, endTime) => {
+    return endTime - startTime;
+}
+
+export const getAverageTimeToAnswer = (answers) => {
+    const totalTimeToAnswer = answers.reduce((accum, answer) => {
+        return accum += answer.timeToAnswer;
+    }, 0);
+
+    return totalTimeToAnswer / answers.length;
+}

@@ -9,7 +9,10 @@ import {
     getFirestore,
     doc,
     setDoc,
+    getDocs,
     collection,
+    query,
+    orderBy
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -39,5 +42,12 @@ export const pushResultsToDb = (userId, results) => {
     const userDocRef = doc(db, 'users', userId);
     const userCollectionRef = collection(userDocRef, 'results');
     return setDoc(doc(userCollectionRef), results);
+}
+export const getStats = (userId) => {
+    const userDocRef = doc(db, 'users', userId);
+    const resultsCollectionRef = collection(userDocRef, 'results');
+    const queryRef = query(resultsCollectionRef, orderBy('endTime', 'desc'));
+
+    return getDocs(queryRef);
 }
 export default firebaseApp;
