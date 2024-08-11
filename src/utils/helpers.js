@@ -217,3 +217,7 @@ export const getAverageTimeToAnswer = (answers) => {
 
     return totalTimeToAnswer / answers.length;
 }
+
+export const getSessionStartDate = (session) => {
+    return new Date(session.startTime).toLocaleDateString('en-GB');
+}

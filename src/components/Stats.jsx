@@ -4,12 +4,6 @@ import SessionHistoryTab from "./Stats/SessionHistoryTab";
 import { useEffect, useState } from "react";
 import { getStats } from "../firebase-service";
 import { useAuth } from '../AuthContext';
-import {
-    getCorrectAnswerCount,
-    getFormattedMilliseconds,
-    getSessionLength,
-    getAverageTimeToAnswer
-} from '../utils/helpers';
 
 const Stats = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -28,7 +22,7 @@ const Stats = () => {
             setLoading(true);
             const querySnapshot = await getStats(user.currentUser.uid);
             const statsData = querySnapshot.docs.map(doc => doc.data());
-            populateStats(statsData);
+            setStats(statsData);
           } catch (err) {
             setError('Failed to fetch stats');
           } finally {
@@ -39,37 +33,10 @@ const Stats = () => {
         fetchStats();
     }, [user]);
 
-    const populateStats = (statsData) => {
-        const totalCorrectAnswers = statsData.reduce((accum, session) => {
-            return accum += getCorrectAnswerCount(session.answers);
-        }, 0);
-        const totalQuestionsAnswered = statsData.reduce((accum, session) => {
-            return accum += session.answers.length;
-        }, 0);
-        const overallCorrectPercentage = totalQuestionsAnswered ? Math.round((totalCorrectAnswers / totalQuestionsAnswered) * 100) + '%': 'N/A';
-    
-        const totalTimePlayed = getFormattedMilliseconds(statsData.reduce((accum, session) => {
-            return accum += getSessionLength(session.startTime, session.endTime);
-        }, 0));
-    
-        const totalAverageTimeToAnswer = statsData.reduce((accum, session) => {
-            return accum += getAverageTimeToAnswer(session.answers);
-        }, 0);
-        const averageTimeToAnswer = getFormattedMilliseconds(totalAverageTimeToAnswer * 1000);
-        setStats({
-            totalCorrectAnswers,
-            totalQuestionsAnswered,
-            overallCorrectPercentage,
-            totalTimePlayed,
-            totalAverageTimeToAnswer,
-            averageTimeToAnswer,
-        });
-    }
-
     const tabs = [
         { label: 'Global', content: <GlobalTab stats={stats} loading={loading} /> },
         { label: 'Charts', content: <div>TODO</div> },
-        { label: 'Session History', content: <SessionHistoryTab /> }
+        { label: 'Session History', content: <SessionHistoryTab stats={stats} loading={loading} /> }
     ];
     
     const handleTabClick = (index) => {
