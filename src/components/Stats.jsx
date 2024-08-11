@@ -67,7 +67,7 @@ const Stats = () => {
     }
 
     const tabs = [
-        { label: 'Global', content: <GlobalTab stats={stats} /> },
+        { label: 'Global', content: <GlobalTab stats={stats} loading={loading} /> },
         { label: 'Charts', content: <div>TODO</div> },
         { label: 'Session History', content: <SessionHistoryTab /> }
     ];
