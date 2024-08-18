@@ -4,6 +4,7 @@ import SessionHistoryTab from "./Stats/SessionHistoryTab";
 import { useEffect, useState } from "react";
 import { getStats } from "../firebase-service";
 import { useAuth } from '../AuthContext';
+import ChartsTab from "./Stats/ChartsTab";
 
 const Stats = () => {
     const [activeTab, setActiveTab] = useState(0);
@@ -35,7 +36,7 @@ const Stats = () => {
 
     const tabs = [
         { label: 'Global', content: <GlobalTab stats={stats} loading={loading} /> },
-        { label: 'Charts', content: <div>TODO</div> },
+        { label: 'Charts', content: <ChartsTab stats={stats} loading={loading} /> },
         { label: 'Session History', content: <SessionHistoryTab stats={stats} loading={loading} /> }
     ];
     
