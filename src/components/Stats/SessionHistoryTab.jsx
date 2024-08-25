@@ -33,8 +33,8 @@ const SessionHistoryTab = ({stats, loading}) => (
                             <td>{new Date(session.endTime).toLocaleTimeString()}</td>
                             <td>{correctAnswerCount} / {session.answers.length}</td>
                             <td>{Math.round(correctAnswerCount / session.answers.length * 100)}%</td>
-                            <td>{getFormattedMilliseconds(getSessionLength(session.startTime, session.endTime))}</td>
                             <td>{getFormattedMilliseconds(getAverageTimeToAnswer(session.answers) * 1000)}</td>
+                            <td>{getFormattedMilliseconds(getSessionLength(session.startTime, session.endTime))}</td>
                         </tr>
                     )})}
                 </tbody>
