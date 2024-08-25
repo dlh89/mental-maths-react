@@ -10,10 +10,11 @@ import {
     Legend,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import autocolors from 'chartjs-plugin-autocolors';
 import CorrectAnswersTab from './charts/CorrectAnswersTab';
 import AverageTimeToAnswerTab from './charts/AverageTimeToAnswerTab';
 
-ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, autocolors);
 
 const ChartsTab = ({ stats, loading }) => {
     const [activeTab, setActiveTab] = useState(0);
