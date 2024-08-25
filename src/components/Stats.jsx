@@ -47,7 +47,7 @@ const Stats = () => {
     return (
         <div>
             <Header />
-            <div className="container">
+            <div className="container mb-4">
                 <h1 className="mb-4">Stats</h1>
                 <ul className="nav nav-tabs mb-4">
                     {tabs.map((tab, index) => (
