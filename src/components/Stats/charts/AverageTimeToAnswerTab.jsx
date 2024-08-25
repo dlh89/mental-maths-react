@@ -1,4 +1,4 @@
-import { getResultsByQuestionType, addPropertyIfNotExists, getQuestionTypeLabel, getCorrectAnswerCount, getAverageTimeToAnswer } from '../../../utils/helpers';
+import { getResultsByQuestionType, addPropertyIfNotExists, getQuestionTypeLabel, getAverageTimeToAnswer } from '../../../utils/helpers';
 import { Line } from 'react-chartjs-2';
 
 const AverageTimeToAnswerTab = ({stats, loading}) => {
