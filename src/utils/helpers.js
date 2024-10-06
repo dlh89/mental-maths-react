@@ -215,7 +215,7 @@ export const getAverageTimeToAnswer = (answers) => {
         return accum += answer.timeToAnswer;
     }, 0);
 
-    return totalTimeToAnswer / answers.length;
+    return Math.round(totalTimeToAnswer / answers.length);
 }
 
 export const getSessionStartDate = (session) => {
